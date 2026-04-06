@@ -1,24 +1,24 @@
-import requests
+from ollama import chat
 
-def plan(query):
+def rewrite_query(query):
     prompt = f"""
-Break this question into smaller steps:
+You are an AI assistant helping with technical queries.
 
-{query}
+Rewrite the query to be specific to AI / machine learning context.
 
-Return each step on a new line.
+Query: {query}
+
+Rewritten query:
 """
 
-    res = requests.post(
-        "http://localhost:11434/api/generate",
-        json={
-            "model": "llama3",
-            "prompt": prompt,
-            "stream": False
-        }
+    response = chat(
+        model="llama3",
+        messages=[{"role": "user", "content": prompt}]
     )
 
-    text = res.json()["response"]
+    return response["message"]["content"].strip()
 
-    steps = [s.strip() for s in text.split("\n") if s.strip()]
-    return steps
+
+def plan(query):
+    improved_query = rewrite_query(query)
+    return [improved_query]

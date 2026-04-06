@@ -16,17 +16,22 @@ def load_pdf(file_path):
 
 
 def chunk_text(text, chunk_size=500, overlap=100):
-    chunks = []
-    start = 0
+    sentences = text.split(". ")
 
-    while start < len(text):
-        end = start + chunk_size
-        chunk = text[start:end]
-        chunks.append(chunk)
-        start += chunk_size - overlap
+    chunks = []
+    current_chunk = ""
+
+    for sentence in sentences:
+        if len(current_chunk) + len(sentence) < chunk_size:
+            current_chunk += sentence + ". "
+        else:
+            chunks.append(current_chunk.strip())
+            current_chunk = sentence + ". "
+
+    if current_chunk:
+        chunks.append(current_chunk.strip())
 
     return chunks
-
 
 def embed_chunks(chunks):
     return model.encode(chunks).tolist()

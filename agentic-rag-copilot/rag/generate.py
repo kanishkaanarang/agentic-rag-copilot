@@ -2,15 +2,23 @@ import requests
 
 def generate_answer(query, context):
     prompt = f"""
-You are a helpful research assistant.
+You are a helpful assistant.
 
-Use the context below to answer the question.
+Explain clearly and simply.
 
-Context:
+RULES:
+- 1–3 sentences only
+- No technical jargon unless needed
+- No repetition
+- No mention of "context"
+
+CONTEXT:
 {context}
 
-Question:
+QUESTION:
 {query}
+
+ANSWER:
 """
 
     res = requests.post(

@@ -35,8 +35,7 @@ class QueryRequest(BaseModel):
 @app.post("/ask")
 def ask(req: QueryRequest):
     try:
-        steps = plan(req.query)
-        answer = execute(req.query, steps)
+        answer = execute(req.query, [req.query])
         return {"answer": answer}
     except Exception as e:
         return {"error": str(e)}
